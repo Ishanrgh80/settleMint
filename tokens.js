@@ -287,5 +287,39 @@ const deployer_address = DEPLOYERS_ADDRESS;
 const rpc = URL;
 const web3 = new Web3(rpc);
 
-const tickets = new web3.eth.Contract(ticketABI,token_address);
+const token = new web3.eth.Contract(tokenABI,token_address);
 
+
+async function checkBalance(_address) {
+    const balance = await token.methods.balanceOf(_address).call();
+    console.log(`Your token balance: ${balance}`);
+}
+
+async function transferTokens(toAddress, amount) {
+    
+    const gasPrice = await web3.eth.getGasPrice();
+    const gasLimit = 21000;
+    const data = token.methods.transfer(toAddress, amount).encodeABI();
+    
+    const tx = {
+        
+        gasPrice,
+        gasLimit,
+        to: ickets.options.address,
+        data,
+    };
+    
+    const signedTx = await web3.eth.accounts.signTransaction(tx,privatekey );
+    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    console.log('Transaction receipt:', receipt);
+}
+
+async function getTotalSupply() {
+    const totalSupply = await token.methods.totalSupply().call();
+    console.log(`Total token supply: ${totalSupply}`);
+}
+
+// Call functions here
+checkBalance();
+transferTokens(USER_2, 240);
+getTotalSupply();
