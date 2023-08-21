@@ -591,6 +591,8 @@ const buy = async(user) => {
 }
 
 
+
+
 const getTicketInfo = async(_tokenId) =>{
     const ticketDetails = await tickets.methods.getTicketinfo(_tokenId).call();
     console.log({ticketDetails})
